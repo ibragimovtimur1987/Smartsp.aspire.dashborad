@@ -1,0 +1,56 @@
+﻿@model Smartsp.aspire.dashborad.Models.MSPCompareByCriteriaData
+@using Smartsp.aspire.dashborad.Extensions;
+
+<h5>@Model.ViewTitle</h5>
+@if (Model != null && Model.Region != null)
+{
+    <h4>@Model.Region.RegionName</h4>
+}
+@if (Model != null && Model.Year != 0)
+{
+    <h4>@Model.Year</h4>
+}
+<button id="printButton" style="float:right;margin-bottom:10px" type="button" class="btn btn-default">Скачать в Excel</button>
+<table class="table" border="1" cellpadding="2" cellspacing="2">
+    <tr>
+        <th class="mcpheader" rowspan="2">@Model.ViewTableFirstColTitle</th>
+
+        <th  class="mcpheader" colspan="2" style="text-align:center;">
+            Адресный критерий
+        </th>
+        <th class="mcpheader" colspan="2" style="text-align:center;">
+            Категориальный критерий
+        </th>
+        <th class="mcpheader" colspan="2" style="text-align:center;">
+            Итого
+        </th>
+    </tr>
+    <tr>
+        @foreach (var item in Model.ValuesByYear)
+        {
+            <th  class="mcpheader">@item.BeneficiariesColTitle</th>
+            <th class="mcpheader">@item.ExpendituresColTitle</th>
+            <th class="mcpheader">@item.BeneficiariesColTitle</th>
+            <th class="mcpheader">@item.ExpendituresColTitle</th>
+            <th class="mcpheader">@item.BeneficiariesColTitle</th>
+            <th class="mcpheader">@item.ExpendituresColTitle</th>
+        }
+    </tr>
+    @foreach (var row in Model.RowTitlePairList)
+    {
+        <tr>
+            <th class="headcol mcptext">@row.Value</th>
+            @foreach (var item in Model.ValuesByYear)
+            {
+                <td class="mcpvalue">@item.Beneficiaries.FirstOrDefault(x => x.Key == row.Value).Value.ToFormattedString(0)</td>
+                <td class="mcpvalue">@item.Expenditures.FirstOrDefault(x => x.Key == row.Value).Value.ToFormattedString()</td>
+                <td class="mcpvalue">@item.Beneficiaries1.FirstOrDefault(x => x.Key == row.Value).Value.ToFormattedString(0)</td>
+                <td class="mcpvalue">@item.Expenditures1.FirstOrDefault(x => x.Key == row.Value).Value.ToFormattedString()</td>
+                @*<td>@item.Beneficiaries2.FirstOrDefault(x => x.Key == row.Value).Value.ToFormattedString(0)</td>
+                <td>@item.Expenditures2.FirstOrDefault(x => x.Key == row.Value).Value.ToFormattedString()</td>*@
+                <td class="mcpvalue">@item.Beneficiaries3.FirstOrDefault(x => x.Key == row.Value).Value.ToFormattedString(0)</td>
+                <td class="mcpvalue">@item.Expenditures3.FirstOrDefault(x => x.Key == row.Value).Value.ToFormattedString()</td>
+            }
+        </tr>
+    }
+</table>

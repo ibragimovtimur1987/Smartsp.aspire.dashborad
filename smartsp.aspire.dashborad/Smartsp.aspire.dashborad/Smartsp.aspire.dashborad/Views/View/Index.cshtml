@@ -1,0 +1,219 @@
+﻿@model Smartsp.aspire.dashborad.Models.MainModel
+@Scripts.Render("~/Scripts/mspcommon.js")
+@Scripts.Render("~/Scripts/mspcompare.js")
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#wr-tabs .tab").eq(0).addClass("uk-active");
+        $('#startYear').multiselect();
+        $('#endYear').multiselect();
+
+        $('#RegionIds').multiselect(aspMultiselectOptionsForRegion);
+    });
+
+    $(document).on("click", "#printButtonMCPEfficiency", (function () {
+
+        var start = $('#startYear').val();
+        var end = $('#endYear').val();
+        if (end == 0 || start == 0) {
+            return;
+        }
+        $.post("@Url.Action("PrintMCPEfficiency", "Tables", null)",
+           { region: $('#RegionIds').val(), startYear: start, endYear: end },
+           function (data) {
+               window.location = '/CompareMCP/Download?fileGuid=' + data["FileGuid"]
+                                    + '&filename=' + data["FileName"];
+           });
+    }));
+    $(document).on("click", "#btnprintSource", (function () {
+
+        window.location = "Content/Aspire.xlsx";
+    }));
+    function loadTables()
+    {
+        var start = $('#startYear').val();
+        var end = $('#endYear').val();
+        if (!$('#RegionIds').val())
+        {
+            $('#yearError2').show();
+            $("#tables").hide();
+            return;
+        }
+        else {
+            $('#yearError2').hide();
+            $("#tables").show();
+        }
+
+        if (end < start) {
+            $('#yearError1').show();
+            $("#tables").hide();
+            return;
+        }
+        else
+        {
+            $('#yearError1').hide();
+            $("#tables").show();
+        }
+        if (end ==0 || start==0) {
+            return;
+        }
+        if (end > start && $('#RegionIds').val().length > 1) $('#multiPeriodError').show();
+        else $('#multiPeriodError').hide();
+        $("#loadingDiv").show();
+        $("#diagrams").hide();
+        $("#tables").hide();
+
+        $.post("@Url.Action("MCPEfficiency", "Tables", null)",
+            { region: $('#RegionIds').val(), startYear: start, endYear: end },
+            function (data) {
+                $("#loadingDiv").hide();
+                $("#tables").show();
+                $("#tables").html(data);
+
+            });
+        if ($('#RegionIds').val().length > 1) {
+            $('.categoryChart').hide();
+        }
+        else {
+            $('.categoryChart').show();
+            $('.categoryChart').each(function (i, item) {
+                $.post("@Url.Action("Draw", "CategoryChart", null)",
+                    { title: $(item).attr('chartTitle'), maxValue: $(item).attr('maxValue'), category: $(item).attr('indicatorCategory'), indicators: eval($(item).attr('indicators')), region: $('#RegionIds').val(), startYear: start, endYear: end, width: eval($(item).attr('customwidth')), itemWidth: eval($(item).attr('customitemwidth')) },
+                function (data) {
+                    $("#diagrams").show();
+                    $(item).html(data);
+                });
+            });
+        }
+
+        $('.regionChart').each(function (i, item) {
+            var customwidth = eval($(item).attr('customwidth'));
+            var customitemwidth = eval($(item).attr('customitemwidth'));
+     
+            if (!customwidth) customwidth = 700;
+            if(!customitemwidth)customitemwidth = 350;
+            $.post("@Url.Action("Draw", "RegionChart", null)",
+                { title: $(item).attr('chartTitle'), maxValue: $(item).attr('maxValue'), valueName: $(item).attr('valueName'), category: $(item).attr('indicatorCategory'), indicators: eval($(item).attr('indicators')), region: $('#RegionIds').val(), startYear: start, endYear: end, enabledlegend: $(item).attr('enabledlegend'), width:customwidth , itemWidth:customitemwidth },
+            function (data) {
+                $("#diagrams").show();
+                $(item).html(data);
+            });
+        });
+
+    }
+</script>
+<style type="text/css" >
+    .categoryChart
+    {
+        padding-top:30px;
+    }
+    .regionChart
+    {
+       padding-top:30px;
+    }
+   
+</style>
+
+<div class="customJumbotron row ">
+
+    <div class="aspireheader">
+        <div class="row rowAdd">
+            <div class="col-md-1">
+                <h3>Регион</h3>
+            </div>
+            <div class="col-md-10">
+                @Html.ListBoxFor(model => model.RegionIds,
+                    new MultiSelectList(Model.RegionList, "RegionId", "RegionName"),
+                    new { @class = "text ui-widget-content ui-corner-all", @style = "width:98%; height:300px;", @onchange = "RegionIdsListener();" })
+                <button type="button" class="btn btn-default" id="btnClearSelectedRegions">Отменить выбор</button>
+                @Html.ValidationMessageFor(model => model.RegionIds)
+                @*<div id="yearError2" style="color:red;display:none;">Выбeрите регион</div>*@
+            </div>
+            <div class="col-md-1">
+                <img title="Скачать данные" id="btnprintSource" src="~/Content/css/excel.png" />
+            </div>
+        </div>
+        <div class="row rowAdd">
+            <div class="col-md-12">
+                <div id="yearError2" style="color:red;display:none;">Выбeрите регион</div>
+            </div>
+        </div>
+        <div class="row rowAdd">
+            <div class="col-md-12">
+                <div style="height: 10px;"></div>
+            </div>
+        </div>
+        <div class="row rowAdd">
+            <div class="col-md-1">
+                <h3>Период</h3>
+            </div>
+            <div class="col-md-11">
+                <label style="margin-top:8px" for="startYear">  с </label>
+                @Html.DropDownList("startYear",
+            new SelectList(Model.YearsKpi, "Key", "Value"),
+            new { @class = "text ui-widget-content ui-corner-all", @style = "width:98%; height:30px;", @onchange = "startYearListener();" })
+                @Html.ValidationMessageFor(model => model.StartYear)
+                <label for="endYear"> по </label>
+                @Html.DropDownList("endYear",
+            new SelectList(Model.YearsKpi, "Key", "Value"),
+            new { @class = "text ui-widget-content ui-corner-all", @style = "width:98%; height:30px;", @onchange = "endYearListener();" })
+                @Html.ValidationMessageFor(model => model.EndYear)
+                @*<div id="yearError1" style="color:red;display:none;">Год начала должен быть меньше года окончания</div>*@
+            </div>
+            @*<div class="col-md-10"></div>*@
+        </div>
+        <div class="row rowAdd">
+            <div class="col-md-12">
+                <div id="yearError1" style="color:red;display:none;">Год начала должен быть меньше года окончания</div>
+            </div>
+        </div>
+        <div class="row rowAdd">
+            <div class="col-md-6"></div>
+            <div class="col-md-6">
+                <div id="multiPeriodError" style="color:red;display:none;">Для двух и более регионов период может быть равен только одному году</div>
+            </div>
+        </div>
+        <div class="row rowAdd">
+            <div class="col-md-12">
+                <div id="yearError1" style="color:red;display:none;">Год начала должен быть меньше года окнчания</div>
+                <div id="yearError2" style="color:red;display:none;">Выбeрите регион</div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div  class="row rowAdd">
+    <div id="loadingDiv" class="widget" style="display: none; text-align: center; width: 400px; height: 100px; background: url(/images/spinner.gif) no-repeat 50% 70% #fff; margin: 10px auto 10px auto;">
+        <div style="margin-left: 30px; margin-top: 20px; margin-bottom: 20px;">
+            <h5 style="width: 90%">Данные загружаются. Пожалуйста, подождите</h5>
+        </div>
+    </div>
+    <div class="clear">
+    </div>
+    <div id="tables">
+    </div>
+    <div id="diagrams">
+        <div class="categoryChart" chartTitle="Охват населения всеми МСП, %" maxValue="undefined" indicators="[3,2,423,424]" customwidth="800" customitemwidth="400"></div>
+        <div class="categoryChart" chartTitle="Охват населения МСП с проверкой доходов, %" maxValue="undefined" indicators="[6,5,425,426]" customwidth="800" customitemwidth="400"></div>
+        <div class="categoryChart" chartTitle="Адекватность: доля всех МСП в доходе  бенефициаров, %" maxValue="undefined" indicators="[16,15,431,432]" customwidth="800" customitemwidth="400"></div>
+        <div class="categoryChart" chartTitle="Адекватность: доля МСП с проверкой доходов в доходе  бенефициаров, %" maxValue="undefined" indicators="[19,18,433,434]" customwidth="800" customitemwidth="400"></div>
+        <div class="categoryChart" chartTitle="Распределение суммы выплат всех МСП по доходным группам, %" maxValue="undefined" indicators="[8,7,427]" customwidth="1150" customitemwidth="575"></div>
+        <div class="categoryChart" chartTitle="Распределение суммы выплат МСП с проверкой доходов по доходным группам, %" maxValue="undefined" indicators="[11,10,12]" customwidth="1350" customitemwidth="675"></div>
+        <div class="categoryChart" chartTitle="Уровень бедности (по ПМ) и сокращение численности бедных (по ПМ) в результате предоставления всех МСП" maxValue="100" indicatorCategory="Эффективность всех МСП" indicators="[435,21]" customwidth="800" customitemwidth="400"></div>
+        <div class="categoryChart" chartTitle="Отношение дефицита дохода к доходу населения и отношение ПМ к среднему доходу, %" maxValue="100" indicatorCategory="Эффективность МСП с проверкой доходов" indicators="[438,439]" customwidth="800" customitemwidth="400"></div>
+
+        <div class="regionChart" chartTitle="Уровень бедности (по ПМ) в результате предоставления МСП, %" indicators="[435]" maxValue="undefined" valueName="" enabledlegend="false"  ></div>
+        <div class="regionChart" chartTitle="Сокращение дефицита дохода у населения и сокращение численности бедных по ПМ в результате предоставления всех МСП, %" indicators="[22,21]" maxValue="undefined" valueName="" enabledlegend="true"></div>
+        <div class="regionChart" chartTitle="Сокращение дефицита дохода у населения и сокращение численности бедных по ПМ в результате предоставления МСП с проверкой доходов, %" indicators="[26,25]" maxValue="undefined" valueName="" enabledlegend="true"></div>
+        <div class="regionChart" chartTitle="Средний размер трансферта (руб./мес) на бенефициара (члена ДХ, получающего меру)" indicators="[13]" maxValue="undefined" valueName="" enabledlegend="false"></div>
+        <div class="regionChart" chartTitle="Доля выплат, идущая на сокращение дефицита дохода у населения, %" indicators="[23,27]" maxValue="undefined" valueName="" enabledlegend="true" customwidth="1000" customitemwidth="500"></div>
+        <div class="regionChart" chartTitle="Охват населения всеми МСП, %" indicators="[3,2,423,424]" maxValue="undefined" valueName="" enabledlegend="true"></div>
+        <div class="regionChart" chartTitle="Охват населения МСП с проверкой доходов, %" indicators="[6,5,425,426]" maxValue="undefined" valueName="" enabledlegend="true"></div>
+        <div class="regionChart" chartTitle="Адекватность: доля всех МСП в доходе  бенефициаров, %" indicators="[16,15,431,432]" maxValue="undefined" valueName="" enabledlegend="true"></div>
+        <div class="regionChart" chartTitle="Адекватность: доля МСП с проверкой доходов в доходе  бенефициаров, %" indicators="[19,18,433,434]" maxValue="undefined" valueName="" enabledlegend="true"></div>
+        <div class="regionChart" chartTitle="Распределение суммы выплат всех МСП по доходным группам, %" indicators="[8,428,427]" maxValue="undefined" valueName="" enabledlegend="true"  customwidth="900" customitemwidth="300"></div>
+        <div class="regionChart" chartTitle="Распределение суммы выплат МСП с проверкой доходов по доходным группам, %" indicators="[11,430,429]" maxValue="undefined" valueName="" enabledlegend="true"  customwidth="900" customitemwidth="300"></div>
+        <div class="regionChart" chartTitle="Сокращение дефицита дохода у населения и сокращение численности бедных по ПМ в результате предоставления МСП с проверкой доходов, %" indicatorCategory="Эффективность всех МСП" indicators="[436]" maxValue="1" valueName="" enabledlegend="false"></div>
+        <div class="regionChart" chartTitle="Отношение дефицита дохода к доходу населения и отношение ПМ к среднему доходу, %" indicatorCategory="Эффективность МСП с проверкой доходов" indicators="[438,439]" maxValue="100" valueName="" enabledlegend="true"></div>
+    </div>
+</div>
+

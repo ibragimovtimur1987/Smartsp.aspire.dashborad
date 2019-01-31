@@ -1,0 +1,186 @@
+﻿body {
+   /* padding-top: 10px;
+    padding-bottom: 20px;*/
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+.dic-row-0 td
+{
+    font-size: 20px;
+    padding-left: 8px!important;
+}
+
+.dic-row-1 td
+{
+    font-size: 18px;
+    padding-left: 25px!important;
+}
+
+.dic-row-2 td
+{
+    font-size: 16px;
+    padding-left: 45px!important;
+}
+
+.dic-row-3 td
+{
+    font-size: 14px;
+    padding-left: 65px!important;
+}   
+
+span.highlight{
+  background: #f1c40f;
+}
+
+/************************************/
+div.legend, div.aspireheader{
+    font-size: 12px;
+}
+div.aspireheader h3{
+    font-size: 14px;
+}
+
+/*ul.multiselect-container{
+    min-width: 760px;
+}*/
+.aspireheader h1,
+.aspireheader h2,
+.aspireheader h3,
+.aspireheader h4,
+.aspireheader h5,
+.aspireheader h6 {
+  margin: 0;
+}
+#tables{
+    overflow-x: scroll;
+    /*padding-left: 17px;
+    padding-right: 17px;*/
+    overflow: auto;
+}
+#tables h3.warning{
+    font-size: 16px;
+    text-align: center;
+    color: #228B22;
+}
+.multiselect-clear-filter img
+{
+    width:17px!important;
+    max-width:none!important;
+}
+.multiselect-search input
+{
+    max-width:none!important;
+}
+
+.mcpheader
+{
+text-align:center;
+vertical-align:middle!important;
+background-color:rgb(238,238,238)
+}
+.mcptext
+{
+text-align:left;
+background-color:rgb(238,238,238)
+}
+.mcpvalue
+{
+text-align:center;
+}
+#btnprintSource
+{
+    width:35px;
+    float:right;
+    /*position:relative!important;
+    left:637px!important;*/
+    cursor: pointer;
+}
+th.headcol {
+    min-width: 250px;
+    text-align: left;
+    white-space: nowrap;
+}
+.lmg20{
+    padding-right: 20px;
+    padding-left: 10px!important;
+    font-family: 'LatoRegular', sans-serif !important;
+    font-size: 14px;
+}
+#textsearch
+{
+ margin-top:7px;
+ width:293px;
+}
+
+/*Понтрол поиска*/
+.multiselect-filter div,
+.multiselect-filter span,
+.multiselect-filter input {
+    box-sizing: border-box;
+}
+.multiselect-filter input {
+    max-width: none !important;
+}
+
+.btn-group button.dropdown-toggle {
+    min-width: 116px;
+}
+.customJumbotron
+{
+  /*padding: 30px;*/
+  margin-bottom: 30px;
+  /*background-color: #eeeeee;*/
+  background-color: white!important;
+}
+#accordion
+{
+    margin-left:-30px;
+    margin-right:-30px;
+}
+
+.emptytr{
+   height: 10px;
+}
+
+.glyphicon-search,  .glyphicon-remove-circle, .multiselect-clear-filter{
+    display: none!important;
+}
+
+.interTable{
+    width: 100%;
+}
+
+.interTable td{
+    border: 1px solid grey;
+    padding: 5px;
+}
+
+.interTable thead{
+    border: 1px solid grey;
+    background-color: #039547; 
+}
+
+.interTable th{
+    text-align: center;
+    padding: 5px;
+    color: white;
+}

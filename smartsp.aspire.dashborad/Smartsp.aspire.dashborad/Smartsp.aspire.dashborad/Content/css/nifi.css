@@ -1,0 +1,62 @@
+﻿.fvfont-size-140,
+.fvfont-container .fvfont-size-140 {
+	font-size: 130% !important;
+}
+
+.fvfont-size-140 .form-search .search-button {
+	padding: 12px !important;
+}
+
+.uk-navbar-nav > li > a {
+	line-height: 48px !important;
+}
+
+.fvfont-size-120 .footer-block-2 > div a {
+	font-size: 1.1rem !important;
+}
+
+.fvfont-size-140 .footer-block-2 > div a {
+	font-size: 1.15rem !important;
+}
+
+.fvfont-size-140 .head-address {
+	font-size: 1.25rem !important;
+}
+
+.form-search .search-button-wrap i {
+	font-size: 16px !important;
+}
+
+.nes_search_form .search-button-wrap-big i {
+	font-size: 20px !important;
+}
+
+.nes_search_form .search-button-wrap-big,
+.nes_search_form .search-button-wrap-big {
+	right: 45px !important;
+}
+
+.tm-headerbar {
+	transition: none !important;
+}
+
+.uk-form legend:after {
+	border: 0 none !important;
+}
+
+.fvfont-size-120 .uk-button-borderless,
+.fvfont-size-140 .uk-button-borderless,
+.fvfont-size-120 .uk-button-border:hover,
+.fvfont-size-140 .uk-button-border:hover {
+	background-position: 95% center !important;
+}
+
+.fvfont-size-120 .uk-button-borderless:hover,
+.fvfont-size-140 .uk-button-borderless:hover {
+	background-position: 98% center !important;
+}
+
+.fvfont-size-120 .uk-button-border,
+.fvfont-size-140 .uk-button-border {
+	background-position: 92% center !important;
+}

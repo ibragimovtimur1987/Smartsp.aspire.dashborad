@@ -1,0 +1,116 @@
+﻿@model Smartsp.aspire.dashborad.Models.CategotyChartData
+
+<script type="text/javascript">
+    var categories = JSON.parse('@Html.Raw(ViewBag.categories)');
+    var series = JSON.parse('@Html.Raw(ViewBag.series)');
+
+    $('#categoryChart_@Model.ClientId').highcharts({
+        legend: {
+            width: @Model.Width,
+            align: 'left',
+            x: 20,
+            itemWidth: @Model.ItemWidth,
+            },      
+        chart: {
+            type: 'column', 
+            backgroundColor:'rgba(255, 255, 255, 0.1)',
+            "inverted": true,
+        },
+        credits: {
+            enabled: false
+        },
+        title: {
+            text: '@Model.RegionDisplayName' + "<br>" + '@Model.Title'
+        },
+        subtitle: {
+            text: ''
+        },
+        xAxis: {
+
+            categories: categories,
+            crosshair: true
+        },
+        yAxis: {
+            min: 0,
+            max: @Model.maxValue,
+            title: {
+                text: ''
+            },
+            labels: {
+                formatter: function() {
+                    return this.value;
+                }
+            }
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            },
+            series: {
+                dataLabels: {
+                    inside: true,
+                    enabled: true,
+                }
+            }
+        },
+        series: series,
+
+        navigation: {
+            buttonOptions: {
+                theme: {
+                    // Good old text links
+                    style: {
+                        fontSize: '14px'
+                        //color: '#039',
+                        //textDecoration: 'underline'
+                    }
+                }
+            }
+        },               
+        exporting: {
+            buttons: {
+                contextButton: {
+                    menuItems: [{
+                        text: 'Печать',
+                        onclick: function () {
+                            this.print({
+                                width: 2400
+                            });                     
+                        }},
+                            {
+                                text: 'Экспорт в png',
+                                onclick: function () {
+                                    this.exportChart({
+                                        width: 2400
+                                    });
+                                }},
+                            {
+                                text: 'Экспорт в pdf',
+                                onclick: function () {
+                                    this.exportChart({
+                                        type: 'application/pdf',
+                                        width: 2400
+                                    });
+                                }}
+                                ,
+                            {
+                                text: 'Экспорт в jpeg',
+                                onclick: function () {
+                                    this.exportChart({
+                                        type: 'image/jpeg',
+                                        width: 2400
+                                    });
+                                }}
+                              
+                    ],
+                    text: 'Экспорт'
+                }
+            }
+        }
+
+    });
+
+</script>
+
+<div id="categoryChart_@Model.ClientId" class="tab-content" ></div>

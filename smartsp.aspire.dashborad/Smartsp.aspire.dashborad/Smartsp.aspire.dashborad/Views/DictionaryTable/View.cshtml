@@ -1,0 +1,13 @@
+﻿@model Smartsp.aspire.dashborad.Models.DictionaryModel
+
+<table class="table" cellpadding="2" cellspacing="2">
+
+    @foreach(var item in Model.Rows)
+    {
+        <tr class="dic-row-@item.Level" >
+            <td>
+                @item.Label @item.Name
+            </td>
+        </tr>
+    }
+</table>

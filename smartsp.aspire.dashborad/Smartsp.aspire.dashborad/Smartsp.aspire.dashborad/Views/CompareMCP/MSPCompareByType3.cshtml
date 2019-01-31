@@ -1,0 +1,37 @@
+﻿@model Smartsp.aspire.dashborad.Models.MSPCompareByTypeData
+
+@using Smartsp.aspire.dashborad.Extensions;
+
+<h5>Формы социальной поддержки по направлению  «@Model.MspArea.Title»</h5>
+<h4>@Model.Region.RegionName</h4>
+<button id="printButton" style="float:right;margin-bottom:10px" type="button" class="btn btn-default">Скачать в Excel</button>
+<table class="table" border="1" cellpadding="2" cellspacing="2">
+    <tr>
+        <th  class="mcpheader" rowspan="2">Категории</th>
+        @foreach (var item in Model.ValuesByYear)
+        {
+            <th class="mcpheader" colspan="2" style="text-align:center;">
+                @item.Title
+            </th>
+        }
+    </tr>
+    <tr>
+        @foreach (var item in Model.ValuesByYear)
+        {
+            <th class="mcpheader">Количество получателей</th>
+            <th class="mcpheader">Расходы на финансирование выплат</th>
+        }
+    </tr>
+    @foreach (var row in Model.RowTitlePairList)
+    {
+        <tr>
+            <th class="headcol mcptext">@row.Value</th>
+            @foreach (var item in Model.ValuesByYear)
+            {
+                <td  class="mcpvalue">@item.Beneficiaries.FirstOrDefault(x => x.Key == row.Value).Value.ToFormattedString(0)</td>
+                <td  class="mcpvalue">@item.Expenditures.FirstOrDefault(x => x.Key == row.Value).Value.ToFormattedString()</td>
+            }
+        </tr>
+    }
+</table>
+@*<input type="button" id="printButton" value="Скачать в Excel" />*@

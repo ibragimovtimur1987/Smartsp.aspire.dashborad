@@ -1,0 +1,105 @@
+﻿@model Smartsp.aspire.dashborad.Models.MainModel
+@{
+    ViewBag.Title = "СПРАВОЧНИК МСП ПО СУБЪЕКТАМ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@Scripts.Render("~/Scripts/mspcommon.js")
+
+@section scripts
+{
+    <script type="text/javascript">
+        $(document).ready(loadDictionary());
+
+        function loadDictionary()
+        {
+            $("#RegionId").multiselect(aspselectOptions);
+            $("#wr-tabs .tab").eq(2).addClass("uk-active")
+        }
+
+        function applySelection(val)
+        {
+            $.ajax({
+                type: 'POST',
+                url: "@Url.Action("Filter", "DictionaryTable", null)",
+                data: { region: $('#RegionId').val(), searchVal: val },
+                success: function (data) {
+                    $("#loadingDiv").hide();
+                    $('#tables').show();
+                    $("#tables").html(data);
+                    applySelectionPost();
+                },
+                async: false
+            });
+        }
+        function applySelectionPost()
+        {
+            var val = $.trim($('#search').val());
+            var $rows = $('#tables tr.dic-row-3');
+            $rows.highlight(val);
+        }
+        function onSearchChange()
+        {
+            var val = $.trim($('#search').val());
+            applySelection(val);
+        }
+        function regionChange()
+        {
+            if ($('#RegionId').val() == "0") {
+                $("#tables").html("");
+                return;
+            }
+            $('#search').val("");
+            $("#RegionId").multiselect(aspselectOptions);
+            $("#wr-tabs .tab").eq(2).addClass("uk-active")
+            $("#loadingDiv").show();
+            applySelection("");
+        }
+        $(document).on("click", "#btnSearch", (function () {
+            onSearchChange();
+
+        }));
+    </script>
+}
+
+<ul class="uk-breadcrumb">
+    <li><a href="/">Главная</a></li>
+    <li><span>Справка</span></li>
+    <li class="uk-active"><span>Справочник МСП по субъектам</span></li>
+</ul>
+
+<h4>СПРАВОЧНИК МСП ПО СУБЪЕКТАМ</h4>
+<br />
+
+<div class="row customJumbotron">
+    @*<div class="container">*@
+        <div class="row rowAdd">
+            <div class="col-md-4">
+                @Html.DropDownList("RegionId",
+                    new SelectList(Model.RegionList, "RegionId", "RegionName"),
+                    new { @class = "text ui-widget-content ui-corner-all", @style = "width:98%; height:30px;", @onchange = "regionChange();" })
+                @Html.ValidationMessageFor(model => model.RegionIds)
+            </div>         
+        </div>
+        <div class="row rowAdd">
+            <div class="col-md-4" id="textsearch">
+                @Html.Editor("search", new { htmlAttributes = new { @class = "form-control", placeholder = "Введите текст для поиска", } })
+
+            </div>
+            <div class="col-md-3">
+                <button type="button" class="btn btn-default" id="btnSearch">Поиск</button>
+            </div>
+        </div>
+    @*</div>*@
+</div>
+
+<div class="row rowAdd">
+    <div id="loadingDiv" class="widget" style="z-index: 1; display: none; text-align: center; width: 400px; height: 100px; background: url(/images/spinner.gif) no-repeat 50% 70% #fff; margin: 10px auto 10px auto;">
+        <div style="margin-left: 30px; margin-top: 20px; margin-bottom: 20px;">
+            <h5 style="width: 90%">Данные загружаются. Пожалуйста, подождите</h5>
+        </div>
+    </div>
+    <div class="clear">
+    </div>
+    <div id="tables">
+    </div>
+</div>

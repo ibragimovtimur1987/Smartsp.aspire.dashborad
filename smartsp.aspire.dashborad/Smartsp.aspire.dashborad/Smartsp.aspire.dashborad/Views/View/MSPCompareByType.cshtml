@@ -1,0 +1,124 @@
+﻿@model Smartsp.aspire.dashborad.Models.MSPCompareByTypeMainModel
+
+@Scripts.Render("~/Scripts/mspcommon.js")
+@Scripts.Render("~/Scripts/mspcompare.js")
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#startYear').multiselect();
+        $('#endYear').multiselect();
+
+        $('#SelectedMspAreas').multiselect(aspMultiselectOptions);
+        $('#SelectedMspCategories').multiselect(aspMultiselectOptions);
+        $('#SelectedMspCategories').multiselect('disable');
+        $('#SelectedMspSubCategories').multiselect(aspMultiselectOptions);
+        $('#SelectedMspSubCategories').multiselect('disable');
+        $('#RegionIds').multiselect($.extend(aspMultiselectOptionsForRegion, { numberDisplayed: 3 }));
+    });
+</script>
+<div class="jumbotron">
+
+    <div class="legend" style="display: none;">
+        <ul>
+            <li>Если выбран 1 субъект и 2 типа МСП одновременно, то выбор категорий и подкатегорий не доступен, период может быть выбран любой</li>
+            <li>Если выбрано 2 и более субъекта и 2 типа МСП одновременно, то выбор категорий и подкатегорий не доступен, а период может быть равен только одному году</li>
+            <li>Если выбран 1 субъект, 1 Направления социальной поддержки , 2 и более категории внутри типа МСП, то выбор подкатегорий не доступен, период может быть любой</li>
+            <li>Если выбрано 2 и более субъекта, 1 Направления социальной поддержки , 2 и более категории внутри типа МСП, то выбор подкатегорий не доступен, а период может быть равен только одному году</li>
+            <li>Если выбран 1 субъект, 1 Направления социальной поддержки , 1 категория внутри типа МСП, то выбор подкатегорий доступен, период может быть любой</li>
+            <li>Если выбрано 2 и более субъекта, 1 Направления социальной поддержки , 1 категория внутри типа МСП, то выбор категорий доступен, а период может быть равен только одному году</li>
+        </ul>
+    </div>
+    <div class="aspireheader">
+        <table class="tableMainControls">
+            <tr>
+                <td class="lmg20">Регион</td>
+                <td  class="fullwidthRegion">
+                    @Html.ListBoxFor(model => model.RegionIds,
+                    new MultiSelectList(Model.RegionList, "RegionId", "RegionName"),
+                    new { @class = "text ui-widget-content ui-corner-all", @style = "width:98%; height:300px;", @onchange = "RegionIdsListener();" })
+                    <button type="button" class="btn btn-default" id="btnClearSelectedRegions">Отменить выбор</button>
+                    @Html.ValidationMessageFor(model => model.RegionIds)
+                    <div id="yearError2" style="color:red;display:none;">Выбeрите регион</div>
+                </td>
+            </tr>
+            <tr class="emptytr"><td></td><td></td></tr>
+            <tr>
+                <td class="lmg20">Период</td>
+                <td>
+                    <label for="startYear">с </label>
+                    @Html.DropDownList("startYear",
+            new SelectList(Model.Years, "Key", "Value"),
+            new { @class = "text ui-widget-content ui-corner-all", @style = "width:98%; height:30px;", @onchange = "startYearListener();" })
+
+
+                    <label for="endYear">по </label>
+                    @Html.DropDownList("endYear",
+            new SelectList(Model.Years, "Key", "Value"),
+            new { @class = "text ui-widget-content ui-corner-all", @style = "width:98%; height:30px;", @onchange = "endYearListener();" })
+
+
+                </td>
+            </tr>
+            <tr class="emptytr"><td></td><td></td></tr>
+            <tr>
+                <td></td>
+                <td>
+                    @Html.ValidationMessageFor(model => model.StartYear)
+                    @Html.ValidationMessageFor(model => model.EndYear)
+                    <div id="yearError1" style="color:red;display:none;">Год начала должен быть меньше года окончания</div>
+                    <div id="yearError3" style="color:red;display:none;">Необходимо выбрать год</div>
+                </td>
+            </tr>
+            <tr class="emptytr"><td></td><td></td></tr>
+            <tr>
+                <td class="lmg20">Направление социальной поддержки</td>
+                <td  class="fullwidth">
+                    @Html.ListBoxFor(
+                    model => model.SelectedMspAreas,
+                    new MultiSelectList(Model.MspAreas, "Id", "Title"),
+                    new { @class = "text ui-widget-content ui-corner-all", @style = "width:98%; height:300px;", @onchange = "SelectedMspAreasListener();" })
+                </td>
+            </tr>
+            <tr class="emptytr"><td></td><td></td></tr>
+            <tr>
+                <td class="lmg20">Форма социальной поддержки</td>
+                <td  class="fullwidth">
+                    @Html.ListBoxFor(
+                    model => model.SelectedMspCategories,
+                    new MultiSelectList(Model.MspCategories, "Id", "Title"),
+                    new { @class = "text ui-widget-content ui-corner-all", @style = "width:98%; height:300px;", @onchange = "SelectedMspCategoriesListener();" })
+                </td>
+            </tr>
+            <tr class="emptytr"><td></td><td></td></tr>
+            <tr>
+                <td class="lmg20">Вид МСП</td>
+                <td  class="fullwidth">
+                    @Html.ListBoxFor(
+                    model => model.SelectedMspSubCategories,
+                    new MultiSelectList(Model.MspSubCategories, "Id", "Title"),
+                    new { @class = "text ui-widget-content ui-corner-all", @style = "width:98%; height:300px;", @onchange = "SelectedMspSubCategoriesListener();" })
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+            </tr>
+        </table>
+    </div>
+    
+    
+
+</div>
+
+
+<div class="row rowAdd">
+    <div id="loadingDiv" class="widget" style="z-index: 1; display: none; text-align: center; width: 400px; height: 100px; background: url(/images/spinner.gif) no-repeat 50% 70% #fff; margin: 10px auto 10px auto;">
+        <div style="margin-left: 30px; margin-top: 20px; margin-bottom: 20px;">
+            <h5 style="width: 90%">Данные загружаются. Пожалуйста, подождите</h5>
+        </div>
+    </div>
+    <div class="clear">
+    </div>
+    <div id="tables">
+    </div>
+    <div class="categoryChart" chartTitle="Эффективность МСП с проверкой дохода (%)"></div>
+    <div class="categoryChart" chartTitle="Эффективность всех МСП (%)"></div>
+</div>

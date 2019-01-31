@@ -1,0 +1,51 @@
+﻿@model Smartsp.aspire.dashborad.Models.MSPEfficiencyData
+
+
+<div><h4>@Model.Region.RegionName</h4>
+    @*<input style="float:right;" class="btn-default" type="button" id="printButton" value="Скачать в Excel" />*@
+    <button  id="printButtonMCPEfficiency" style="float:right;margin-bottom:10px" type="button" class="btn btn-default">Скачать в Excel</button>
+    </div>
+<table class="table table-bordered" border="1" cellpadding="2" cellspacing="2">
+    <tr>
+        <th rowspan="2" class="mcpheader" style="border-right-color:black;border-bottom-color:black" >Показатель</th>
+        @foreach (var item in Model.ValuesByYear)
+        {
+            <th class="mcpheader" colspan="2" style="border-right-color:black;" >
+                @item.Year
+            </th>
+        }
+    </tr>
+    <tr>
+        @foreach (var item in Model.ValuesByYear)
+        {
+            <th  class="mcpheader" style="border-bottom-color:black;">в результате всех МСП</th>
+            <th class="mcpheader" style="border-bottom-color:black;border-right-color:black;">в результате МСП с проверкой доходов</th>        	
+        }
+     </tr>
+    <tr>
+        <td class="mcptext" style="border-right-color:black;">@Model.RowTitles[0]</td>
+        @foreach (var item in Model.ValuesByYear)
+        {
+            <td class="mcpvalue" colspan="2"  style="border-right-color:black;">@item.Transfert.Value</td>
+        }
+    </tr>    
+    @foreach (var row in Model.RowTitles.Skip(1))
+    {
+        <tr>
+            <td class="mcptext" style="border-right-color:black;">@row</td>
+            @foreach (var item in Model.ValuesByYear)
+            {
+                if (row == "Индекс Джини в результате предоставления МСП")
+                {
+                 <td class="mcpvalue" colspan="2" style="border-right-color:black;" >@item.Total.FirstOrDefault(x => x.Key == row).Value.ToString().Replace('.', ',')</td>
+                }
+                else
+                {
+                 <td class="mcpvalue" >@item.Total.FirstOrDefault(x => x.Key == row).Value.ToString().Replace('.', ',')</td>
+                 <td class="mcpvalue" style="border-right-color:black;" >@item.Verified.FirstOrDefault(x => x.Key == row).Value.ToString().Replace('.', ',')</td>
+                }
+            }
+        </tr>
+    }
+</table>
+

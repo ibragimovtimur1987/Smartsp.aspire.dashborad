@@ -1,0 +1,111 @@
+﻿@model Smartsp.aspire.dashborad.Models.RegionChartData
+
+<script type="text/javascript">
+    var categories = JSON.parse('@Html.Raw(ViewBag.categories)');
+    var series = JSON.parse('@Html.Raw(ViewBag.series)');
+    var enabledval = Boolean(@Model.enabledlegend);
+    var countRegion = @ViewBag.CountRegion -1;
+    var enablescrollbar =false;
+    if(countRegion>5)
+    {
+        countRegion = 5;
+        enablescrollbar=true;
+    }
+    $('#regionChart_@Model.ClientId').highcharts({
+        legend: {
+            width: @Model.Width,
+            itemWidth: @Model.ItemWidth,
+            enabled: enabledval,
+          
+            itemMarginBottom: 15,
+        },
+        plotOptions: {
+            series: {
+                dataLabels: {
+                    inside: true,
+                    enabled: true,
+                }
+            }
+        },
+        chart: {
+            type: 'column', 
+            backgroundColor:'rgba(255, 255, 255, 0.1)', 
+            "inverted": true,
+        },
+        title: {
+            text: '@Model.Title' +"<br>"+ '@Model.Year'
+        },
+        credits: {
+            enabled: false
+        },
+        xAxis: {
+            min: 0,
+            max: countRegion,
+            scrollbar: {
+                enabled: enablescrollbar,
+                showFull: false
+            },
+            tickLength: 0,
+            categories: categories,
+            labels: {
+                style: {
+                    fontSize: '20px'
+                }
+            }
+        },
+        yAxis: {
+            min: 0,
+            max: @Model.maxValue,
+            title: {
+                text: '@Model.valueName'
+            },
+            labels: {
+                formatter: function() {
+                    return this.value;
+                }
+            }
+        },
+        exporting: {
+            buttons: {
+                contextButton: {
+                    menuItems: [{
+                        text: 'Печать',
+                        onclick: function () {
+                            this.print({
+                                width: 2400
+                            });
+                        }},
+                            {
+                                text: 'Экспорт в png',
+                                onclick: function () {
+                                    this.exportChart({
+                                        width: 2400
+                                    });
+                                }},
+                            {
+                                text: 'Экспорт в pdf',
+                                onclick: function () {
+                                    this.exportChart({
+                                        type: 'application/pdf',
+                                        width: 2400
+                                    });
+                                }}
+                                ,
+                            {
+                                text: 'Экспорт в jpeg',
+                                onclick: function () {
+                                    this.exportChart({
+                                        type: 'image/jpeg',
+                                        width: 2400
+                                    });
+                                }}
+
+                    ],
+                    text: 'Экспорт'
+                }
+            }
+        },
+        series: series
+    });
+</script>
+<div id="regionChart_@Model.ClientId"></div>

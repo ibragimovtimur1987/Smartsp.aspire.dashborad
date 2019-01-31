@@ -1,0 +1,33 @@
+﻿@model Smartsp.aspire.dashborad.Models.MSPCompareBySourceData
+@using Smartsp.aspire.dashborad.Extensions;
+
+<h5>@Model.ViewTitle</h5>
+@if (Model != null && Model.Region != null)
+{
+    <h4>@Model.Region.RegionName</h4>
+}
+@if (Model != null && Model.Year != 0)
+{
+    <h4>@Model.Year</h4>
+}
+<button id="printButton" style="float:right;margin-bottom:10px" type="button" class="btn btn-default">Скачать в Excel</button>
+<table class="table" border="1" cellpadding="2" cellspacing="2">
+    <tr>
+        <th class="mcpheader">@Model.ViewTableFirstColTitle</th>
+        <th class="headcol mcpheader">Расходы из федерального бюджета (тыс. руб.)</th>
+        <th class="headcol mcpheader">Расходы из регионального бюджета (тыс. руб.)</th>
+        <th class="headcol mcpheader">Софинансирование (тыс. руб.)</th>
+    </tr>
+    @foreach (var row in Model.RowTitlePairList)
+    {
+        <tr>
+            <th class="headcol mcptext">@row.Value</th>
+            @foreach (var item in Model.ValuesByYear)
+            {
+                <td class="mcpvalue">@item.Federal.FirstOrDefault(x => x.Key == row.Value).Value.ToFormattedString()</td>
+                <td class="mcpvalue">@item.Regional.FirstOrDefault(x => x.Key == row.Value).Value.ToFormattedString()</td>
+                <td class="mcpvalue">@item.Common.FirstOrDefault(x => x.Key == row.Value).Value.ToFormattedString()</td>
+            }
+        </tr>
+    }
+</table>

@@ -1,0 +1,27 @@
+﻿@{
+    ViewBag.Title = "Главная";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<ul class="uk-breadcrumb"><li><a href="/">Главная</a></li><li class="uk-active"><span>Российские данные и индикаторы ASPIRE</span></li></ul>
+
+<br/>
+
+<h3>Ключевые показатели эффективности социальной поддержки в регионах</h3>
+<br />
+
+@section scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.get("@Url.Action("Index", "View", null)", function (data) {
+                $("#content").html(data);
+            });
+        });
+    </script>
+}
+
+<div class="row rowAdd">
+    <div id="content">
+    </div>
+</div>

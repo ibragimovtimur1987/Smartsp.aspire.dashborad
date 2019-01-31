@@ -1,0 +1,68 @@
+﻿@media (max-width: 479px) {
+  .footer-text {
+    padding-left: 25px !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .tm-toolbar {
+    height: auto;
+  }
+  .toolbar-left,
+  .toolbar-right {
+    float: none;
+  }
+  
+  .toolbar-left {
+    margin-bottom: 15px;
+  }
+  
+  .toolbar-right {
+    margin-top: 0 !important;
+  }
+  
+  .hidden-bg-small .uk-cover-background {
+    background-image: none !important;
+  }
+  
+  .hidden-slidenav-small .uk-slidenav {
+    display: none !important;
+  }
+  
+  #home-tab-teaser .uk-slider a.uk-button,
+  .uk-margin-xlarge-left {
+    margin-left: 0 !important;
+  }
+}
+
+@media (max-width: 959px) {
+  #home-training {
+    height: auto !important;
+  }
+  
+  #home-training .uk-thumbnav { 
+    display: none;
+  }
+  
+  .hidden-bg-medium .uk-cover-background {
+    background-image: none !important;
+  }
+  
+  .hidden-slidenav-medium .uk-slidenav {
+    display: none !important;
+  }
+  
+  #tm-main-bottom > .uk-width-medium-2-3,
+  #tm-main-bottom > .uk-width-medium-1-3 {
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 1219px) {
+  .hidden-bg-large .uk-cover-background {
+    background-image: none !important;
+  } 
+  .hidden-slidenav-large .uk-slidenav {
+    display: none !important;
+  } 
+}

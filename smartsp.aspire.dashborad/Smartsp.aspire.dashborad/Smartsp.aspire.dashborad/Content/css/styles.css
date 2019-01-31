@@ -1,0 +1,165 @@
+﻿@import "/Content/css/nifi.css";
+
+
+
+.fv-color-black * {
+	color: #000 !important;
+}
+
+.fvpanel {
+	display: none;
+	position: relative;
+	width: 100%;
+	min-height: 42px;
+	padding: 10px 0;
+	text-align: center;
+}
+
+.fv-fixed {
+	margin-top: 62px !important;
+}
+
+.fv-fixed .fvpanel.on {
+	display: block;
+	position: fixed;
+	top: 0;
+	z-index: 1000;
+}
+
+.fvpanel.on {
+	display: block;
+}
+
+.fvpanel,
+.fvpanel * {
+	background-color: #D6D6D6 !important;
+	color: #000 !important;
+}
+
+.fvpanel > * {
+	font-size: initial;
+}
+
+.fvpanel p {
+	margin: 0;
+}
+
+.fvfont-container,
+.fvcolorscheme-container,
+.fvreset-container {
+	display: inline-block;
+	margin: 5px 20px;
+}
+
+.fvfont-container span,
+.fvcolorscheme-container span {
+	margin: 0 3px;
+	cursor: pointer;
+}
+
+.fvfont-container span.set,
+.fvcolorscheme-container span.set {
+	text-decoration: underline;
+}
+
+.fvcolorscheme-container span {
+	display: inline-block;
+	width: 28px;
+	height: 28px;
+	font-size: 16px;
+	line-height: 28px !important;
+}
+
+.fvcolorscheme-container span:hover {
+	text-decoration: underline;
+}
+
+.fvcolorscheme-label:hover {
+	text-decoration: none;
+}
+
+.fvcolorscheme-black-on-white {
+	background-color: #fff !important;
+	color: #000 !important;
+}
+
+.fvcolorscheme-white-on-black {
+	background-color: #000 !important;
+	color: #fff !important;
+}
+
+.fvcolorscheme-container span:first-child {
+	width: auto;
+	height: auto;
+}
+
+.fvfont-container span:first-child,
+.fvcolorscheme-container span:first-child {
+	cursor: initial;
+}
+
+.fvfont-size-100,
+.fvfont-container .fvfont-size-100 {
+	font-size: 100% !important;
+}
+
+.fvfont-size-120,
+.fvfont-container .fvfont-size-120 {
+	font-size: 120% !important;
+}
+
+.fvfont-size-140,
+.fvfont-container .fvfont-size-140 {
+	font-size: 140% !important;
+}
+
+.fvfont-size-160,
+.fvfont-container .fvfont-size-160 {
+	font-size: 160% !important;
+}
+
+.fvfont-size-120 * {
+	font-size: 1.2rem !important;
+}
+
+.fvfont-size-140 * {
+	font-size: 1.3rem !important;
+}
+
+.fvfont-size-160 * {
+	font-size: 1.4rem !important;
+}
+
+.fvfont-size-120 *,
+.fvfont-size-140 *,
+.fvfont-size-160 * {
+	line-height: 122% !important;
+}
+
+.fvreset-container-label {
+	cursor: pointer;
+}
+
+.fvreset-container-image {
+	padding: 6px 0 6px 40px;
+	background: url("../img/eye-icon.png") no-repeat left center !important;
+	cursor: pointer;
+}
+
+.fvreset-container span:hover {
+	text-decoration: underline;
+}
+
+.hidden {
+	display: none;  /* !important; */
+}
+
+/* responsive */
+@media (max-width: 767px) {
+	.fvfont-size-label,
+	.fvcolorscheme-label,
+	.fvreset-container-label {
+		display: none !important;
+		/*visibility: hidden;*/
+	}
+}

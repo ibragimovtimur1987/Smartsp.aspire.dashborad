@@ -1,0 +1,38 @@
+﻿@{
+    ViewBag.Title = "Адресные, категориальные и смешанные МСП";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<ul class="uk-breadcrumb">
+    <li><a href="/">Главная</a></li>
+    <li><a href="/CompareMCP/RussianDataMain"><span>Российские данные и индикаторы ASPIRE</span></a></li>
+    <li class="uk-active"><span>Показатели по направлениям, формам социальной поддержки и видам МСП в регионах</span></li>
+</ul>
+
+<br />
+<div class="row rowAdd">
+    <div class="col-md-3 divCellTab"><h5><a class="aDiffer" href="/CompareMCP/Index">Анализ МСП по направлениям и формам социальной поддержки и видам МСП классификации ASPIRE</a></h5></div>
+    <div class="col-md-1"></div>
+    <div class="col-md-3 divCellTab"><h5><a class="aDiffer" href="/CompareMCP/CompareBySource">Анализ МСП по объемам и источникам финансирования</a></h5></div>
+    <div class="col-md-1"></div>
+    <div class="col-md-3 divCellTab activeTab"><h5><a class="aDiffer activeText" href="/CompareMCP/CompareByCriteria">Анализ МСП по критерию определения нуждаемости – адресные и категориальные</a></h5></div>
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#wr-tabs .tab").eq(0).addClass("uk-active");
+            $.get("@Url.Action("MSPCompareByCriteria", "View", null)", function (data) {
+                $("#content").html(data);
+            });
+        });
+    </script>
+}
+
+
+<div class="row rowAdd">
+    <br/>
+    <div id="content">
+    </div>
+</div>

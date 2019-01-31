@@ -1,0 +1,397 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.6.2
+-- Dumped by pg_dump version 9.6.2
+
+-- Started on 2017-03-31 11:53:46
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'SQL_ASCII';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 1 (class 3079 OID 12387)
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- TOC entry 2160 (class 0 OID 0)
+-- Dependencies: 1
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 188 (class 1259 OID 16458)
+-- Name: Category; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE "Category" (
+    "Id" integer NOT NULL,
+    "Name" character varying(200) NOT NULL
+);
+
+
+ALTER TABLE "Category" OWNER TO postgres;
+
+--
+-- TOC entry 2161 (class 0 OID 0)
+-- Dependencies: 188
+-- Name: TABLE "Category"; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON TABLE "Category" IS 'Категории показателей';
+
+
+--
+-- TOC entry 187 (class 1259 OID 16456)
+-- Name: Category_Id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE "Category_Id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE "Category_Id_seq" OWNER TO postgres;
+
+--
+-- TOC entry 2162 (class 0 OID 0)
+-- Dependencies: 187
+-- Name: Category_Id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE "Category_Id_seq" OWNED BY "Category"."Id";
+
+
+--
+-- TOC entry 190 (class 1259 OID 16466)
+-- Name: Indicators; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE "Indicators" (
+    "Id" integer NOT NULL,
+    "Name" character varying(200) NOT NULL,
+    "Category" integer,
+    "Area" integer,
+    "SubCategory" integer
+);
+
+
+ALTER TABLE "Indicators" OWNER TO postgres;
+
+--
+-- TOC entry 2163 (class 0 OID 0)
+-- Dependencies: 190
+-- Name: TABLE "Indicators"; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON TABLE "Indicators" IS 'Показатели';
+
+
+--
+-- TOC entry 2164 (class 0 OID 0)
+-- Dependencies: 190
+-- Name: COLUMN "Indicators"."Area"; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN "Indicators"."Area" IS 'SP_area: 1. Social assistance / 2. Labor market programs
+Тип МСП: 1. Социальная поддержка / 2. Рынок труда';
+
+
+--
+-- TOC entry 2165 (class 0 OID 0)
+-- Dependencies: 190
+-- Name: COLUMN "Indicators"."SubCategory"; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN "Indicators"."SubCategory" IS 'Подкатегория';
+
+
+--
+-- TOC entry 189 (class 1259 OID 16464)
+-- Name: Indicators_Id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE "Indicators_Id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE "Indicators_Id_seq" OWNER TO postgres;
+
+--
+-- TOC entry 2166 (class 0 OID 0)
+-- Dependencies: 189
+-- Name: Indicators_Id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE "Indicators_Id_seq" OWNED BY "Indicators"."Id";
+
+
+--
+-- TOC entry 186 (class 1259 OID 16449)
+-- Name: Regions; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE "Regions" (
+    "Id" integer NOT NULL,
+    "Code" character(5) NOT NULL,
+    "Name" character varying(100)
+);
+
+
+ALTER TABLE "Regions" OWNER TO postgres;
+
+--
+-- TOC entry 185 (class 1259 OID 16447)
+-- Name: Regions_Id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE "Regions_Id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE "Regions_Id_seq" OWNER TO postgres;
+
+--
+-- TOC entry 2167 (class 0 OID 0)
+-- Dependencies: 185
+-- Name: Regions_Id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE "Regions_Id_seq" OWNED BY "Regions"."Id";
+
+
+--
+-- TOC entry 192 (class 1259 OID 16479)
+-- Name: Values; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE "Values" (
+    "Id" integer NOT NULL,
+    "Region" integer NOT NULL,
+    "Indicator" integer NOT NULL,
+    "DataYear" integer,
+    "SurveyYear" integer,
+    "Values" real[]
+);
+
+
+ALTER TABLE "Values" OWNER TO postgres;
+
+--
+-- TOC entry 2168 (class 0 OID 0)
+-- Dependencies: 192
+-- Name: TABLE "Values"; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON TABLE "Values" IS 'Знаяения показателей';
+
+
+--
+-- TOC entry 2169 (class 0 OID 0)
+-- Dependencies: 192
+-- Name: COLUMN "Values"."Values"; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN "Values"."Values" IS 'Набор значений';
+
+
+--
+-- TOC entry 191 (class 1259 OID 16477)
+-- Name: Values_Id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE "Values_Id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE "Values_Id_seq" OWNER TO postgres;
+
+--
+-- TOC entry 2170 (class 0 OID 0)
+-- Dependencies: 191
+-- Name: Values_Id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE "Values_Id_seq" OWNED BY "Values"."Id";
+
+
+--
+-- TOC entry 2021 (class 2604 OID 16461)
+-- Name: Category Id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY "Category" ALTER COLUMN "Id" SET DEFAULT nextval('"Category_Id_seq"'::regclass);
+
+
+--
+-- TOC entry 2022 (class 2604 OID 16469)
+-- Name: Indicators Id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY "Indicators" ALTER COLUMN "Id" SET DEFAULT nextval('"Indicators_Id_seq"'::regclass);
+
+
+--
+-- TOC entry 2020 (class 2604 OID 16452)
+-- Name: Regions Id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY "Regions" ALTER COLUMN "Id" SET DEFAULT nextval('"Regions_Id_seq"'::regclass);
+
+
+--
+-- TOC entry 2023 (class 2604 OID 16482)
+-- Name: Values Id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY "Values" ALTER COLUMN "Id" SET DEFAULT nextval('"Values_Id_seq"'::regclass);
+
+
+--
+-- TOC entry 2027 (class 2606 OID 16463)
+-- Name: Category Category_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY "Category"
+    ADD CONSTRAINT "Category_pkey" PRIMARY KEY ("Id");
+
+
+--
+-- TOC entry 2029 (class 2606 OID 16471)
+-- Name: Indicators Indicators_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY "Indicators"
+    ADD CONSTRAINT "Indicators_pkey" PRIMARY KEY ("Id");
+
+
+--
+-- TOC entry 2025 (class 2606 OID 16454)
+-- Name: Regions Regions_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY "Regions"
+    ADD CONSTRAINT "Regions_pkey" PRIMARY KEY ("Id");
+
+
+--
+-- TOC entry 2032 (class 2606 OID 16484)
+-- Name: Values Values_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY "Values"
+    ADD CONSTRAINT "Values_pkey" PRIMARY KEY ("Id");
+
+
+--
+-- TOC entry 2030 (class 1259 OID 16500)
+-- Name: fki_FK_IndicatorCategoryArea; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "fki_FK_IndicatorCategoryArea" ON "Indicators" USING btree ("Area");
+
+
+--
+-- TOC entry 2034 (class 2606 OID 16495)
+-- Name: Indicators FK_IndicatorCategoryArea; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY "Indicators"
+    ADD CONSTRAINT "FK_IndicatorCategoryArea" FOREIGN KEY ("Area") REFERENCES "Category"("Id");
+
+
+--
+-- TOC entry 2035 (class 2606 OID 16485)
+-- Name: Values FK_ValuesIndicator; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY "Values"
+    ADD CONSTRAINT "FK_ValuesIndicator" FOREIGN KEY ("Indicator") REFERENCES "Indicators"("Id");
+
+
+--
+-- TOC entry 2171 (class 0 OID 0)
+-- Dependencies: 2035
+-- Name: CONSTRAINT "FK_ValuesIndicator" ON "Values"; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON CONSTRAINT "FK_ValuesIndicator" ON "Values" IS 'Ссылка на Показатель';
+
+
+--
+-- TOC entry 2036 (class 2606 OID 16490)
+-- Name: Values FK_ValuesRegion; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY "Values"
+    ADD CONSTRAINT "FK_ValuesRegion" FOREIGN KEY ("Region") REFERENCES "Regions"("Id");
+
+
+--
+-- TOC entry 2172 (class 0 OID 0)
+-- Dependencies: 2036
+-- Name: CONSTRAINT "FK_ValuesRegion" ON "Values"; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON CONSTRAINT "FK_ValuesRegion" ON "Values" IS 'Ссылка на Регион';
+
+
+--
+-- TOC entry 2033 (class 2606 OID 16472)
+-- Name: Indicators PF_IndicatorCategory; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY "Indicators"
+    ADD CONSTRAINT "PF_IndicatorCategory" FOREIGN KEY ("Category") REFERENCES "Category"("Id");
+
+
+--
+-- TOC entry 2173 (class 0 OID 0)
+-- Dependencies: 2033
+-- Name: CONSTRAINT "PF_IndicatorCategory" ON "Indicators"; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON CONSTRAINT "PF_IndicatorCategory" ON "Indicators" IS 'Ссылка на категорию';
+
+
+-- Completed on 2017-03-31 11:53:46
+
+--
+-- PostgreSQL database dump complete
+--
+
